@@ -48,7 +48,7 @@ class PopupBackend(NotificationBackend):
                 DeliveryStatus.UNAVAILABLE, self.name, "desktop app shutting down"
             )
         self.bridge.show_requested.emit(notification)
-        return DeliveryResult(DeliveryStatus.DISPATCHED, self.name, "shown as an TurnPing popup")
+        return DeliveryResult(DeliveryStatus.DISPATCHED, self.name, "shown as a TurnPing popup")
 
     def withdraw(self, event_id: str) -> None:
         self.bridge.withdraw_requested.emit(event_id)

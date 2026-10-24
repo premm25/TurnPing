@@ -16,7 +16,7 @@ First alpha release (not published).
   transport, a bounded spool, auto-start of the app, and a headless fallback.
 - Event pipeline: deduplication, session tracking, policy (priorities, sounds, quiet
   hours, pause, per-agent and per-event rules), coalescing, and bounded reminder escalation.
-- Native Windows toasts (WinRT) with honest delivery status, an TurnPing popup
+- Native Windows toasts (WinRT) with honest delivery status, a TurnPing popup
   fallback when Windows notifications are off, and click-to-return via `turnping://`.
 - Tray app: dashboard, searchable history, settings, session-details fallback, light/dark theme.
 - Safe, idempotent, reversible hook installers with backups and verification.
