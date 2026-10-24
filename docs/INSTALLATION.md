@@ -3,7 +3,27 @@
 TurnPing installs per user. No administrator rights are needed and nothing is written
 outside your user profile.
 
-## Option A: release zip
+## Option A: installer (recommended)
+
+1. Download `TurnPing-<version>-Setup.exe` (and its `.sha256`) from
+   [Releases](https://github.com/premm25/TurnPing/releases), then optionally verify:
+   `Get-FileHash .\TurnPing-0.1.0-Setup.exe -Algorithm SHA256`
+2. Run it (see [SmartScreen](#smartscreen-and-antivirus)). Choices:
+   - **Connect the AI coding agents found on this PC** (on): runs `turnping-cli install`,
+     which adds hooks for every detected agent with the safety steps below.
+   - **Start TurnPing when I sign in to Windows** (on).
+   - **Create a desktop shortcut** (off).
+3. Start a new agent session. Hooks are read when a session starts.
+
+It installs to `%LOCALAPPDATA%\Programs\TurnPing\app` (the same place as `install.ps1`, so
+either method upgrades the other), adds a Start-menu shortcut and an entry in
+**Settings → Apps**. Running a newer Setup upgrades in place: it stops the running app,
+replaces the program files and re-checks the hooks.
+
+Silent install: `TurnPing-0.1.0-Setup.exe /VERYSILENT /SUPPRESSMSGBOXES /TASKS="connectagents"`
+(add `,startup` to the task list to start with Windows).
+
+## Option A2: release zip
 
 1. Download `TurnPing-<version>-win64.zip` and `.sha256`, then verify:
    `Get-FileHash .\TurnPing-0.1.0-win64.zip -Algorithm SHA256`
@@ -18,8 +38,11 @@ outside your user profile.
 ```
 
 `build.ps1` produces `dist\TurnPing\TurnPing.exe` (tray app), `turnping-cli.exe`
-(console CLI used by hooks) and `dist\TurnPing-<version>-win64.zip` with a SHA-256 file.
-Build options: `-Python <path>`, `-Venv <dir>`, `-SkipTests`.
+(console CLI used by hooks), `dist\TurnPing-<version>-win64.zip` and, when
+[Inno Setup 6](https://jrsoftware.org/isinfo.php) is installed
+(`winget install JRSoftware.InnoSetup --scope user`), `dist\TurnPing-<version>-Setup.exe`
+built from `packaging\turnping.iss`. Each gets a SHA-256 file.
+Build options: `-Python <path>`, `-Venv <dir>`, `-SkipTests`, `-RequireSetup`.
 
 ## Option C: development install
 
@@ -82,6 +105,12 @@ binary. Freshly built files can be briefly locked by scanners or sync clients;
 `build.ps1` retries archiving for that reason.
 
 ## Uninstall
+
+Installed with Setup: **Settings → Apps → Installed apps → TurnPing → Uninstall**. It runs
+`turnping-cli uninstall` (the same steps as below) and asks whether to delete history and
+preferences (default: keep).
+
+Installed with the scripts:
 
 ```powershell
 .\scripts\uninstall.ps1             # keeps history/preferences

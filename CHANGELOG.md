@@ -6,7 +6,7 @@ All notable changes are documented here. The format follows
 
 ## [0.1.0] - 2026-10-24
 
-First alpha release (not published).
+First alpha release.
 
 ### Added
 - Provider-independent event contract (schema v1) with validation, redaction and UTC timestamps.
@@ -23,3 +23,5 @@ First alpha release (not published).
 - CLI: `run`, `doctor`, `test-notification`, `integrations`, `install`, `uninstall`,
   `history`, `send`, `pause`, `resume`, `quit`.
 - PyInstaller build (two executables), install/uninstall scripts, and GitHub Actions CI.
+- Per-user Windows installer (`TurnPing-<version>-Setup.exe`, Inno Setup) with an
+  Apps & features uninstall entry.

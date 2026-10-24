@@ -12,6 +12,8 @@
     dist\TurnPing\TurnPing.exe       windowed desktop app
     dist\TurnPing\turnping-cli.exe   console CLI used by agent hooks
     dist\TurnPing-<version>-win64.zip
+    dist\TurnPing-<version>-Setup.exe   Windows installer (needs Inno Setup 6; skipped with a
+                                        warning if it isn't installed, unless -RequireSetup)
 
   The executables are NOT code-signed. See docs\INSTALLATION.md (SmartScreen).
 
@@ -22,12 +24,29 @@
 param(
     [string]$Python = "",
     [string]$Venv = "$env:LOCALAPPDATA\TurnPing-build\venv",
-    [switch]$SkipTests
+    [switch]$SkipTests,
+    [switch]$RequireSetup
 )
 
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $PSScriptRoot
 Set-Location $Root
+
+function Write-Checksum([string]$File) {
+    $Hash = (Get-FileHash $File -Algorithm SHA256).Hash
+    Set-Content -Path "$File.sha256" -Value "$Hash  $(Split-Path -Leaf $File)" -Encoding ascii
+    return $Hash
+}
+
+function Find-Iscc {
+    $OnPath = Get-Command iscc -ErrorAction SilentlyContinue
+    if ($OnPath) { return $OnPath.Source }
+    foreach ($Dir in @("${env:ProgramFiles(x86)}\Inno Setup 6", "$env:ProgramFiles\Inno Setup 6",
+                       "$env:LOCALAPPDATA\Programs\Inno Setup 6")) {
+        if ($Dir -and (Test-Path "$Dir\ISCC.exe")) { return "$Dir\ISCC.exe" }
+    }
+    return $null
+}
 
 function Invoke-Checked([string]$Exe, [string[]]$Arguments) {
     & $Exe @Arguments
@@ -78,7 +97,19 @@ for ($attempt = 1; $attempt -le 6; $attempt++) {
         Start-Sleep -Seconds 5
     }
 }
-$Hash = (Get-FileHash $Zip -Algorithm SHA256).Hash
-Set-Content -Path "$Zip.sha256" -Value "$Hash  $(Split-Path -Leaf $Zip)" -Encoding ascii
+$Hash = Write-Checksum $Zip
 Write-Host "Built $Out"
 Write-Host "Archive $Zip (SHA256 $Hash)"
+
+$Iscc = Find-Iscc
+if ($Iscc) {
+    Invoke-Checked $Iscc @("/Q", "/DAppVersion=$Version", "packaging\turnping.iss")
+    $Setup = Join-Path $Root "dist\TurnPing-$Version-Setup.exe"
+    if (-not (Test-Path $Setup)) { throw "missing build output: $Setup" }
+    $SetupHash = Write-Checksum $Setup
+    Write-Host "Installer $Setup (SHA256 $SetupHash)"
+} elseif ($RequireSetup) {
+    throw "Inno Setup 6 (ISCC.exe) not found; it is required with -RequireSetup."
+} else {
+    Write-Warning "Inno Setup 6 not found; skipped TurnPing-$Version-Setup.exe. Install it with: winget install JRSoftware.InnoSetup --scope user"
+}

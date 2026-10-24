@@ -51,18 +51,26 @@ Details, event mappings and limitations: [docs/INTEGRATIONS.md](docs/INTEGRATION
 
 ## Install
 
-Requirements: Windows 10 or 11. Python 3.12+ is needed only when installing from source.
+Requirements: Windows 10 or 11 (64-bit). Python 3.12+ is needed only when installing from source.
 
-**From a release zip** (unsigned, see [SmartScreen notes](docs/INSTALLATION.md#smartscreen-and-antivirus)):
+**Download (recommended):**
 
-```powershell
-.\scripts\install.ps1 -Zip .\TurnPing-0.1.0-win64.zip
-```
+1. Download `TurnPing-<version>-Setup.exe` from the
+   [latest release](https://github.com/premm25/TurnPing/releases/latest).
+2. Run it. Windows SmartScreen will say the app is from an unknown publisher, because it
+   isn't code-signed. Choose **More info → Run anyway** (you can first check the file
+   against its `.sha256`, see [SmartScreen notes](docs/INSTALLATION.md#smartscreen-and-antivirus)).
+3. Keep **Connect the AI coding agents found on this PC** ticked and finish. TurnPing opens
+   and lives in the system tray.
+4. Start a **new** Claude Code (or Codex / Gemini CLI) session. You'll get a notification
+   when the agent finishes or needs you.
+
+No administrator rights are needed. Uninstall from **Settings → Apps → Installed apps → TurnPing**.
 
 **From source:**
 
 ```powershell
-git clone <this repository>; cd turnping
+git clone https://github.com/premm25/TurnPing.git; cd TurnPing
 .\scripts\build.ps1            # builds dist\TurnPing\ (runs the tests first)
 .\scripts\install.ps1          # installs to %LOCALAPPDATA%\Programs\TurnPing
 ```
@@ -119,6 +127,11 @@ A preview of the agent's last message is **off** by default. See
 [docs/SECURITY.md](docs/SECURITY.md).
 
 ## Uninstall
+
+If you used the installer: **Settings → Apps → Installed apps → TurnPing → Uninstall**.
+It asks whether to delete your history and preferences too (default: keep them).
+
+If you used the scripts:
 
 ```powershell
 .\scripts\uninstall.ps1             # removes hooks, registrations, program; keeps history

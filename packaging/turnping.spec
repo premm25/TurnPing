@@ -11,6 +11,8 @@ ICON = str(ROOT / "src" / "turnping" / "desktop" / "assets" / "turnping.ico")
 datas = [(str(ROOT / "src" / "turnping" / "desktop" / "assets"), "turnping/desktop/assets")]
 hidden = collect_submodules("turnping") + collect_submodules("winrt")
 excludes = ["tkinter", "PySide6.QtWebEngineCore", "PySide6.QtQml", "PySide6.QtQuick", "PySide6.Qt3DCore"]
+# Dev-only tools that PyInstaller pulls in through optional imports (e.g. pydantic's mypy plugin).
+excludes += ["mypy", "ast_serialize", "setuptools", "pkg_resources", "pytest", "_pytest"]
 
 
 def analysis(script):

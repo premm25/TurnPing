@@ -22,20 +22,29 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.14"
+      - name: Ensure Inno Setup
+        shell: pwsh
+        run: |
+          if (-not (Get-Command iscc -ErrorAction SilentlyContinue) -and
+              -not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup -y --no-progress
+          }
       - name: Build
         shell: pwsh
-        run: ./scripts/build.ps1 -Python python -Venv "$env:RUNNER_TEMP\venv"
+        run: ./scripts/build.ps1 -Python python -Venv "$env:RUNNER_TEMP\venv" -RequireSetup
       - uses: actions/upload-artifact@v4
         with:
           name: TurnPing-win64
           path: |
+            dist/*-Setup.exe
             dist/*.zip
-            dist/*.zip.sha256
+            dist/*.sha256
       - name: Draft release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           draft: true
           files: |
+            dist/*-Setup.exe
             dist/*.zip
-            dist/*.zip.sha256
+            dist/*.sha256
