@@ -56,7 +56,7 @@ Requirements: Windows 10 or 11 (64-bit). Python 3.12+ is needed only when instal
 **Download (recommended):**
 
 1. Download `TurnPing-<version>-Setup.exe` from the
-   [latest release](https://github.com/premm25/TurnPing/releases/latest).
+   [Releases page](https://github.com/premm25/TurnPing/releases).
 2. Run it. Windows SmartScreen will say the app is from an unknown publisher, because it
    isn't code-signed. Choose **More info → Run anyway** (you can first check the file
    against its `.sha256`, see [SmartScreen notes](docs/INSTALLATION.md#smartscreen-and-antivirus)).
