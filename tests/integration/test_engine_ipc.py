@@ -155,8 +155,10 @@ def test_ipc_rejects_oversized_message(server):
     conn = Client(pipe_address(), family="AF_PIPE")
     answer_challenge(conn, key)
     deliver_challenge(conn, key)
-    conn.send_bytes(b"x" * (MAX_MESSAGE_BYTES + 1))
+    # The server drops the connection; depending on the Python version the client sees
+    # that while still writing (BrokenPipeError) or when reading the reply (EOFError).
     with pytest.raises((EOFError, OSError)):
+        conn.send_bytes(b"x" * (MAX_MESSAGE_BYTES + 1))
         conn.recv_bytes()
     conn.close()
     assert server.received == []
