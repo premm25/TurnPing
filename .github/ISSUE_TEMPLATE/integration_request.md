@@ -12,5 +12,5 @@ labels: integration
 
 **Can it run a local command or write JSON somewhere?**
 
-Note: AgentPing only integrates through documented mechanisms. It does not scrape
+Note: TurnPing only integrates through documented mechanisms. It does not scrape
 terminal output.

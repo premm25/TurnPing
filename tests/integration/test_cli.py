@@ -4,26 +4,26 @@ import json
 
 import pytest
 
-from agentping import __version__
-from agentping.cli import main
-from agentping.installation.hooks import ClaudeCodeInstaller
-from agentping.notifications.base import DeliveryResult, DeliveryStatus
-from agentping.security.paths import get_paths
+from turnping import __version__
+from turnping.cli import main
+from turnping.installation.hooks import ClaudeCodeInstaller
+from turnping.notifications.base import DeliveryResult, DeliveryStatus
+from turnping.security.paths import get_paths
 
 
 @pytest.fixture(autouse=True)
 def no_registry(monkeypatch):
     calls = []
     monkeypatch.setattr(
-        "agentping.installation.system.register_system_integration",
+        "turnping.installation.system.register_system_integration",
         lambda: calls.append("register"),
     )
     monkeypatch.setattr(
-        "agentping.installation.system.unregister_system_integration",
+        "turnping.installation.system.unregister_system_integration",
         lambda: calls.append("unregister") or ["mock"],
     )
     monkeypatch.setattr(
-        "agentping.installation.system.set_start_with_windows",
+        "turnping.installation.system.set_start_with_windows",
         lambda enabled: calls.append(f"startup={enabled}"),
     )
     return calls
@@ -31,7 +31,7 @@ def no_registry(monkeypatch):
 
 def test_help_and_version(capsys):
     assert main([]) == 0
-    assert "agentping" in capsys.readouterr().out
+    assert "turnping" in capsys.readouterr().out
     with pytest.raises(SystemExit) as exc:
         main(["--version"])
     assert exc.value.code == 0
@@ -89,16 +89,14 @@ def test_purge_preserves_settings_backups(capsys, user_home):
     path.write_text('{"theme": "dark"}')
     main(["install", "claude-code"])
     main(["uninstall", "--purge-data"])
-    kept = get_paths().home.parent / "AgentPing-settings-backups"
+    kept = get_paths().home.parent / "TurnPing-settings-backups"
     assert list(kept.rglob("*.bak"))
 
 
 def test_send_generic_event_and_history(capsys, monkeypatch):
+    monkeypatch.setattr("turnping.hook._launch_app_with_args", lambda args: False)  # force headless
     monkeypatch.setattr(
-        "agentping.hook._launch_app_with_args", lambda args: False
-    )  # force headless
-    monkeypatch.setattr(
-        "agentping.runtime.WindowsToastBackend.show",
+        "turnping.runtime.WindowsToastBackend.show",
         lambda self, n: DeliveryResult(DeliveryStatus.DISPATCHED, "mock"),
     )
     assert (
@@ -130,10 +128,10 @@ def test_send_rejects_reserved_provider(capsys):
 
 
 def test_test_notification_reports_unavailable_honestly(capsys, monkeypatch):
-    from agentping.notifications.base import BackendStatus
+    from turnping.notifications.base import BackendStatus
 
     monkeypatch.setattr(
-        "agentping.runtime.WindowsToastBackend.status",
+        "turnping.runtime.WindowsToastBackend.status",
         lambda self: BackendStatus(False, "Windows notifications are turned off"),
     )
     assert main(["test-notification"]) == 1
@@ -142,7 +140,7 @@ def test_test_notification_reports_unavailable_honestly(capsys, monkeypatch):
 
 
 def test_pause_resume_without_app(capsys):
-    from agentping.runtime import build_runtime
+    from turnping.runtime import build_runtime
 
     assert main(["pause"]) == 0
     rt = build_runtime(toast=False)
@@ -155,7 +153,7 @@ def test_pause_resume_without_app(capsys):
 
 
 def test_open_uri_ignores_malformed(capsys):
-    assert main(["open-uri", "agentping://evil?event=x"]) == 2
+    assert main(["open-uri", "turnping://evil?event=x"]) == 2
 
 
 def test_quit_when_not_running(capsys):

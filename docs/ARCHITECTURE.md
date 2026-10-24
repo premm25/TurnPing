@@ -1,19 +1,19 @@
 # Architecture
 
-AgentPing is a single-user desktop utility: one tray process plus a short-lived hook
+TurnPing is a single-user desktop utility: one tray process plus a short-lived hook
 process per agent event. There is no server, no network listener and no cloud component.
 
 ```text
  coding agent (Claude Code / Codex / Gemini CLI / script)
         |  runs a documented hook command, JSON on stdin
         v
- agentping hook <provider>         (short-lived process, ~0.4 s)
+ turnping hook <provider>         (short-lived process, ~0.4 s)
    read stdin (bounded) -> adapter.translate() -> AgentEvent (validated, redacted)
    + host window discovery (parent-process walk)
         |  authenticated named pipe (HMAC challenge, JSON only, 64 KiB cap)
         |  fallback: spool file + start the app detached, or headless delivery
         v
- AgentPing desktop app (tray)
+ TurnPing desktop app (tray)
    IPC server thread --> Engine thread (bounded queue)
                            EventRouter.process():
                              dedup -> session association -> reminder resolution
@@ -22,7 +22,7 @@ process per agent event. There is no server, no network listener and no cloud co
    Qt GUI thread: tray, dashboard, history, settings, popups (via queued signals)
         |
         v
- NotificationManager -> Windows toast (WinRT) | AgentPing popup | sound
+ NotificationManager -> Windows toast (WinRT) | TurnPing popup | sound
 ```
 
 ## Components
@@ -46,7 +46,7 @@ process per agent event. There is no server, no network listener and no cloud co
 | `storage/` | SQLite (WAL) with versioned migrations, corruption quarantine, and the repository (all SQL, parameterized). |
 | `installation/` | Safe JSON hook installers, backups, validation, and per-user OS registration. |
 | `desktop/` | PySide6 UI. `Controller` mediates. All blocking work runs on the engine thread or the thread pool. |
-| `cli.py` | `agentping` commands. |
+| `cli.py` | `turnping` commands. |
 
 ## Key decisions
 
@@ -56,10 +56,10 @@ process per agent event. There is no server, no network listener and no cloud co
 - **WinRT directly instead of a toast wrapper**, for full control of toast XML (protocol
   activation, `reminder` scenario for urgent alerts), reading the notifier `setting` to
   report *disabled* honestly, and confirming delivery through `ToastNotificationManager.history`.
-- **Protocol activation for clicks** (`agentping://open?event=<id>`, registered per user).
+- **Protocol activation for clicks** (`turnping://open?event=<id>`, registered per user).
   It works after the process that showed the toast has exited, with no COM server needed.
 - **Own popup fallback.** On the development machine, Windows notifications were turned
-  off for the user account. AgentPing detects this and uses its own topmost popup while
+  off for the user account. TurnPing detects this and uses its own topmost popup while
   the app runs, instead of failing silently.
 - **Adapter runs inside the hook process.** Raw payloads (prompts, tool input,
   assistant text) never leave the hook. Only the normalized event crosses IPC. This

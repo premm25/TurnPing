@@ -1,15 +1,14 @@
-<p align="center"><img src="assets/icons/agentping-128.png" width="96" alt="AgentPing logo"></p>
+<p align="center"><img src="assets/icons/turnping-128.png" width="96" alt="TurnPing logo"></p>
 
-<h1 align="center">AgentPing</h1>
+<h1 align="center">TurnPing</h1>
 <p align="center"><b>One ping. Every agent.</b><br>
 Local-first desktop notifications and attention management for AI coding agents on Windows.</p>
 
-> **Status: alpha (v0.1.0).** Windows 10/11 only. "AgentPing" is a provisional name:
-> other projects already use it (see [docs/ROADMAP.md](docs/ROADMAP.md#naming)).
+> **Status: alpha (v0.1.0).** Windows 10/11 only.
 
 You start a long task in Claude Code, switch to the browser, and miss the moment the
 agent finishes, fails, or stops to ask permission. With several agents in several
-repositories it gets worse. AgentPing tells you, with a desktop notification, **which
+repositories it gets worse. TurnPing tells you, with a desktop notification, **which
 agent** in **which project and session** needs you, and takes you back to that window
 with one click.
 
@@ -17,11 +16,11 @@ with one click.
 
 <sub>Screenshots are rendered from the real app (`scripts/screenshots.py`) using labelled
 demo events. The banner is genuine: the screenshot machine has Windows notifications
-turned off, so AgentPing falls back to its own popups.</sub>
+turned off, so TurnPing falls back to its own popups.</sub>
 
 ## What it does
 
-- **Native Windows notifications** (toasts), with an **AgentPing popup fallback** when
+- **Native Windows notifications** (toasts), with an **TurnPing popup fallback** when
   Windows notifications are turned off or blocked. Delivery is reported honestly as
   *confirmed* (in Action Center), *dispatched*, *failed* or *unavailable*.
 - **Correct event semantics.** "Claude finished responding" is not reported as "task
@@ -46,7 +45,7 @@ turned off, so AgentPing falls back to its own popups.</sub>
 | **Claude Code** | Official [hooks](https://code.claude.com/docs/en/hooks) (`~/.claude/settings.json`) | **Verified** against a real Claude Code 2.1.309 install: real session start, response finished and session end events produced notifications, and concurrent sessions stayed separate. Permission/input events are tested with documented payloads. |
 | **Codex CLI** | Official [hooks](https://developers.openai.com/codex/hooks) (`~/.codex/hooks.json`) | Implemented and contract-tested with documented payloads. **Not verified** against a real install (Codex was not available). Codex requires you to trust the hooks via `/hooks`. |
 | **Gemini CLI** | Official [hooks](https://github.com/google-gemini/gemini-cli/blob/main/docs/hooks/index.md) (`~/.gemini/settings.json`) | Implemented and contract-tested with documented payloads. **Not verified** against a real install. Reminders are disabled for Gemini by design (see [INTEGRATIONS](docs/INTEGRATIONS.md#gemini-cli)). |
-| **Anything else** | `agentping send` (generic, authenticated local interface) | Implemented and tested. |
+| **Anything else** | `turnping send` (generic, authenticated local interface) | Implemented and tested. |
 
 Details, event mappings and limitations: [docs/INTEGRATIONS.md](docs/INTEGRATIONS.md).
 
@@ -57,40 +56,40 @@ Requirements: Windows 10 or 11. Python 3.12+ is needed only when installing from
 **From a release zip** (unsigned, see [SmartScreen notes](docs/INSTALLATION.md#smartscreen-and-antivirus)):
 
 ```powershell
-.\scripts\install.ps1 -Zip .\AgentPing-0.1.0-win64.zip
+.\scripts\install.ps1 -Zip .\TurnPing-0.1.0-win64.zip
 ```
 
 **From source:**
 
 ```powershell
-git clone <this repository>; cd agentping
-.\scripts\build.ps1            # builds dist\AgentPing\ (runs the tests first)
-.\scripts\install.ps1          # installs to %LOCALAPPDATA%\Programs\AgentPing
+git clone <this repository>; cd turnping
+.\scripts\build.ps1            # builds dist\TurnPing\ (runs the tests first)
+.\scripts\install.ps1          # installs to %LOCALAPPDATA%\Programs\TurnPing
 ```
 
-Or, for development: `pip install -e ".[dev]"`, then use the `agentping` command.
+Or, for development: `pip install -e ".[dev]"`, then use the `turnping` command.
 
 The installer installs hooks for every agent it detects. To install manually:
 
 ```powershell
-agentping install claude-code      # or codex, gemini-cli; no name = all detected
-agentping integrations             # check status
+turnping install claude-code      # or codex, gemini-cli; no name = all detected
+turnping integrations             # check status
 ```
 
 ## Use
 
 ```powershell
-agentping run                  # start the tray app (dashboard, reminders, popups)
-agentping test-notification    # send a labelled test through the real pipeline
-agentping doctor               # diagnose notifications, integrations, config, database
-agentping history              # recent events (also in the app's History page)
-agentping pause / resume       # pause notifications
-agentping send --provider my-build --category TASK_COMPLETED --message "Build finished"
-agentping quit                 # exit the tray app
+turnping run                  # start the tray app (dashboard, reminders, popups)
+turnping test-notification    # send a labelled test through the real pipeline
+turnping doctor               # diagnose notifications, integrations, config, database
+turnping history              # recent events (also in the app's History page)
+turnping pause / resume       # pause notifications
+turnping send --provider my-build --category TASK_COMPLETED --message "Build finished"
+turnping quit                 # exit the tray app
 ```
 
-Closing the window keeps AgentPing in the tray. Use **Exit** in the tray menu (or
-`agentping quit`) to stop it. If the app isn't running when an agent event arrives, the
+Closing the window keeps TurnPing in the tray. Use **Exit** in the tray menu (or
+`turnping quit`) to stop it. If the app isn't running when an agent event arrives, the
 hook starts it in the background.
 
 | History | Settings | Popup |
@@ -99,20 +98,20 @@ hook starts it in the background.
 
 ## Troubleshooting
 
-Start with `agentping doctor`. Common issues (no notifications appear, Focus Assist, VS
+Start with `turnping doctor`. Common issues (no notifications appear, Focus Assist, VS
 Code tabs, Codex trust prompts) are covered in
 [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md).
 
 ## What data is stored
 
-Everything stays in `%LOCALAPPDATA%\AgentPing`:
+Everything stays in `%LOCALAPPDATA%\TurnPing`:
 
 | File | Contents |
 |---|---|
 | `config.toml` | Your settings |
-| `agentping.db` | Event history (time, agent, event type, project path, session id, short sanitized message, delivery result) and session state. 30-day retention by default. |
+| `turnping.db` | Event history (time, agent, event type, project path, session id, short sanitized message, delivery result) and session state. 30-day retention by default. |
 | `logs\` | Rotating logs, redacted. No prompts, tool input or payloads. |
-| `backups\` | Copies of agent settings files taken before AgentPing edits them |
+| `backups\` | Copies of agent settings files taken before TurnPing edits them |
 | `ipc.key` | Random key that authenticates local hook connections |
 
 Notifications contain the agent name, project folder name and a short system message.
@@ -126,7 +125,7 @@ A preview of the agent's last message is **off** by default. See
 .\scripts\uninstall.ps1 -PurgeData  # also deletes history and preferences
 ```
 
-Only AgentPing's own hook entries are removed; other tools' hooks are untouched.
+Only TurnPing's own hook entries are removed; other tools' hooks are untouched.
 
 ## How it compares
 
@@ -136,7 +135,7 @@ Basic "agent finished" notifications are not new. Projects such as
 [toasty](https://github.com/shanselman/toasty),
 [cc-notification](https://github.com/kmio11/cc-notification) and
 [ccnudge](https://github.com/RonitSachdev/ccnudge) cover parts of this, and Claude Code
-itself can emit terminal notifications. AgentPing's focus is a **unified, local-first
+itself can emit terminal notifications. TurnPing's focus is a **unified, local-first
 attention layer**: one event contract across agents, separate session tracking, distinct
 permission/input alerts, safe reminder escalation, click-to-return, history, and an
 installer that never clobbers your settings. Features and maturity differ between these

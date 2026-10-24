@@ -1,4 +1,4 @@
-"""Example: integrating a hypothetical agent ("acme-agent") with AgentPing.
+"""Example: integrating a hypothetical agent ("acme-agent") with TurnPing.
 
 Suppose acme-agent can run a command on lifecycle events and pipes JSON like::
 
@@ -8,17 +8,17 @@ Suppose acme-agent can run a command on lifecycle events and pipes JSON like::
 
 Steps to ship a real integration (see docs/INTEGRATIONS.md, "Adding a provider"):
 
-1. Write an adapter like the one below in ``src/agentping/adapters/acme/adapter.py``.
-2. Register it in ``agentping/adapters/registry.py`` (``_BUILTIN``).
+1. Write an adapter like the one below in ``src/turnping/adapters/acme/adapter.py``.
+2. Register it in ``turnping/adapters/registry.py`` (``_BUILTIN``).
 3. Add documented payload fixtures under ``tests/fixtures/acme/`` and contract tests.
 4. If the agent's config can be edited safely, add an installer (subclass
    ``JsonHooksInstaller`` when its config uses the same ``hooks`` shape).
 5. Document setup, limitations and what was verified against a real install.
 
 No change to the router, policy, reminders or notification backends is needed.
-Until then, a script can already reach AgentPing through the generic interface:
+Until then, a script can already reach TurnPing through the generic interface:
 
-    agentping send --provider acme-agent --category RESPONSE_STOPPED --session c-42
+    turnping send --provider acme-agent --category RESPONSE_STOPPED --session c-42
 """
 
 from __future__ import annotations
@@ -26,14 +26,14 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-from agentping.adapters.base import (
+from turnping.adapters.base import (
     AdapterError,
     AdapterOptions,
     ProviderAdapter,
     ProviderCapabilities,
     optional_str,
 )
-from agentping.contracts.events import AgentEvent, EventCategory
+from turnping.contracts.events import AgentEvent, EventCategory
 
 _MAP = {
     "turn.done": EventCategory.RESPONSE_STOPPED,  # a response ended, not "task done"
@@ -62,7 +62,7 @@ class AcmeAgentAdapter(ProviderAdapter):
             raise AdapterError("missing or invalid required field 'event'")
         category = _MAP.get(native)
         if category is None:
-            return None  # an event AgentPing does not care about
+            return None  # an event TurnPing does not care about
         meta: dict[str, Any] = {}
         tool = optional_str(payload, "tool")
         if tool:

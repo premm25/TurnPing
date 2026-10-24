@@ -1,10 +1,10 @@
 import sqlite3
 from datetime import UTC, datetime, timedelta
 
-from agentping.contracts.events import AgentEvent, EventCategory, HostWindow
-from agentping.storage.database import Database
-from agentping.storage.migrations import MIGRATIONS
-from agentping.storage.repository import Repository
+from turnping.contracts.events import AgentEvent, EventCategory, HostWindow
+from turnping.storage.database import Database
+from turnping.storage.migrations import MIGRATIONS
+from turnping.storage.repository import Repository
 
 T0 = datetime(2026, 10, 24, 12, 0, tzinfo=UTC)
 
@@ -102,11 +102,11 @@ def test_app_state():
 
 
 def test_corrupt_database_is_moved_aside_not_deleted(tmp_path):
-    path = tmp_path / "agentping.db"
+    path = tmp_path / "turnping.db"
     path.write_bytes(b"this is definitely not a sqlite database" * 100)
     db = Database(path)
     assert db.recovery_note and "moved" in db.recovery_note
-    corrupt = list(tmp_path.glob("agentping.corrupt-*.db"))
+    corrupt = list(tmp_path.glob("turnping.corrupt-*.db"))
     assert len(corrupt) == 1
     assert corrupt[0].read_bytes().startswith(b"this is definitely")
     Repository(db).record_event(ev(), decision="notified")  # fresh db works

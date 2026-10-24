@@ -13,11 +13,11 @@ labels: bug
 1.
 
 **Environment**
-- AgentPing version (`agentping --version`):
+- TurnPing version (`turnping --version`):
 - Windows version:
 - Agent and version (e.g. Claude Code 2.1.x):
 - Terminal/editor (Windows Terminal, VS Code, ...):
 
 **Diagnostics**
-Paste the output of `agentping doctor`. It contains no prompts or secrets, but please
+Paste the output of `turnping doctor`. It contains no prompts or secrets, but please
 review it before posting. Do not paste raw hook payloads or transcripts.

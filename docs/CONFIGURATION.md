@@ -1,10 +1,10 @@
 # Configuration
 
-Settings live in `%LOCALAPPDATA%\AgentPing\config.toml` (override the folder with
-`AGENTPING_HOME`). The Settings page writes this file. Manual edits are fine and are
-picked up when AgentPing starts. Unknown keys are errors, so typos are reported. If the
-file is invalid, AgentPing runs on defaults, shows the error in the dashboard and in
-`agentping doctor`, and never overwrites it silently. Saving from Settings replaces it
+Settings live in `%LOCALAPPDATA%\TurnPing\config.toml` (override the folder with
+`TURNPING_HOME`). The Settings page writes this file. Manual edits are fine and are
+picked up when TurnPing starts. Unknown keys are errors, so typos are reported. If the
+file is invalid, TurnPing runs on defaults, shows the error in the dashboard and in
+`turnping doctor`, and never overwrites it silently. Saving from Settings replaces it
 after copying the broken file to `config.broken-<timestamp>.toml`.
 
 All keys are optional. Defaults:
@@ -83,7 +83,7 @@ Every toast has **Open session** and **Dismiss** buttons when it can be clicked 
 
 ## Other runtime state
 
-- **Pause** (tray, dashboard, `agentping pause`/`resume`) is stored in the database and
+- **Pause** (tray, dashboard, `turnping pause`/`resume`) is stored in the database and
   survives restarts. While paused, events are recorded and reminders are cancelled.
 - **Start with Windows** is the registry entry described in
   [INSTALLATION.md](INSTALLATION.md#start-with-windows). The checkbox reflects the
@@ -93,5 +93,5 @@ Every toast has **Open session** and **Dismiss** buttons when it can be clicked 
 
 | Variable | Purpose |
 |---|---|
-| `AGENTPING_HOME` | Data folder (config, database, logs, IPC key). Each folder gets its own pipe, so test instances never collide. |
-| `AGENTPING_USER_HOME` | Home folder used to locate agent config files (testing). |
+| `TURNPING_HOME` | Data folder (config, database, logs, IPC key). Each folder gets its own pipe, so test instances never collide. |
+| `TURNPING_USER_HOME` | Home folder used to locate agent config files (testing). |

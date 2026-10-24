@@ -1,6 +1,6 @@
 # Integrations
 
-AgentPing uses only documented hook mechanisms. It never scrapes terminal output, never
+TurnPing uses only documented hook mechanisms. It never scrapes terminal output, never
 returns a decision to the agent, and never approves or denies anything.
 
 | | Claude Code | Codex CLI | Gemini CLI | Generic |
@@ -15,20 +15,20 @@ returns a decision to the agent, and never approves or denies anything.
 | Reminders | yes | yes | **disabled** | yes |
 | Verified against real install | **yes** (2.1.309) | no (not installed) | no (not installed) | yes |
 
-Check status at any time with `agentping integrations` or the dashboard. Labels:
+Check status at any time with `turnping integrations` or the dashboard. Labels:
 
-- **Installed and operational**: hooks are present, point to this AgentPing, and an event
+- **Installed and operational**: hooks are present, point to this TurnPing, and an event
   from the agent has been received.
 - **Installed but unverified**: hooks are correct, but no event has arrived yet.
-- **Not installed**: no AgentPing hooks were found (or the agent isn't on this machine).
+- **Not installed**: no TurnPing hooks were found (or the agent isn't on this machine).
 - **Misconfigured**: invalid config file, missing hooks, or hooks pointing to a moved or
-  deleted AgentPing. Fix with `agentping install <provider>`.
+  deleted TurnPing. Fix with `turnping install <provider>`.
 
 ## Claude Code
 
 Source: <https://code.claude.com/docs/en/hooks>, checked 2026-10-24.
 
-`agentping install claude-code` adds these handlers to `~/.claude/settings.json`:
+`turnping install claude-code` adds these handlers to `~/.claude/settings.json`:
 
 | Event | Mode | Why |
 |---|---|---|
@@ -55,7 +55,7 @@ documented-payload contract tests and end-to-end hook subprocess tests.
 
 Source: <https://developers.openai.com/codex/hooks>, checked 2026-10-24.
 
-`agentping install codex` writes `~/.codex/hooks.json` (it never edits `config.toml`):
+`turnping install codex` writes `~/.codex/hooks.json` (it never edits `config.toml`):
 `Stop` (sync, prints `{}` because Codex requires JSON for Stop), `PermissionRequest`
 (background: Codex documents that background hooks cannot approve or deny), plus
 `SessionStart`, `SessionEnd`, `UserPromptSubmit` and `PostToolUse`.
@@ -64,39 +64,39 @@ Source: <https://developers.openai.com/codex/hooks>, checked 2026-10-24.
 Codex skips untrusted hooks.
 
 The adapter also understands the legacy `notify` program payload
-(`agent-turn-complete`) if you configure `notify = ["<agentping-cli>", "hook", "codex"]`
+(`agent-turn-complete`) if you configure `notify = ["<turnping-cli>", "hook", "codex"]`
 yourself. Codex passes the JSON as the last argument.
 
 Status: implemented and contract-tested. Not verified against a real Codex install.
 How Codex launches hook commands on Windows (cmd or PowerShell) was not verified either.
-AgentPing writes unquoted forward-slash paths, which work in both, as long as the install
+TurnPing writes unquoted forward-slash paths, which work in both, as long as the install
 path has no spaces.
 
 ## Gemini CLI
 
 Source: <https://github.com/google-gemini/gemini-cli/tree/main/docs/hooks>, checked 2026-10-24.
 
-`agentping install gemini-cli` adds `AfterAgent`, `Notification`, `SessionStart`,
+`turnping install gemini-cli` adds `AfterAgent`, `Notification`, `SessionStart`,
 `SessionEnd` and `BeforeAgent` to `~/.gemini/settings.json` (timeouts in milliseconds).
 The hook always prints `{}` because Gemini requires stdout to be pure JSON. Gemini runs
-hooks with a sanitized environment, so AgentPing resolves its data folder through
+hooks with a sanitized environment, so TurnPing resolves its data folder through
 Windows APIs rather than environment variables.
 
 **Reminders are disabled for Gemini CLI.** Gemini hooks are synchronous only, so the
 per-tool `AfterTool` hook that would prove "permission granted, agent working again"
-would add about 0.4 s to every tool call. Without it, AgentPing can't tell "still
+would add about 0.4 s to every tool call. Without it, TurnPing can't tell "still
 blocked" from "already answered", so it doesn't escalate.
 
-If your `settings.json` contains comments (Gemini tolerates them), AgentPing refuses to
+If your `settings.json` contains comments (Gemini tolerates them), TurnPing refuses to
 rewrite it and leaves it untouched. Add this snippet manually instead (adjust the path):
 
 ```json
 {
   "hooks": {
-    "AfterAgent":   [{"hooks": [{"type": "command", "name": "agentping-after-agent", "timeout": 10000,
-                                 "command": "C:/Users/you/AppData/Local/Programs/AgentPing/app/agentping-cli.exe hook gemini-cli"}]}],
-    "Notification": [{"hooks": [{"type": "command", "name": "agentping-notification", "timeout": 10000,
-                                 "command": "C:/Users/you/AppData/Local/Programs/AgentPing/app/agentping-cli.exe hook gemini-cli"}]}]
+    "AfterAgent":   [{"hooks": [{"type": "command", "name": "turnping-after-agent", "timeout": 10000,
+                                 "command": "C:/Users/you/AppData/Local/Programs/TurnPing/app/turnping-cli.exe hook gemini-cli"}]}],
+    "Notification": [{"hooks": [{"type": "command", "name": "turnping-notification", "timeout": 10000,
+                                 "command": "C:/Users/you/AppData/Local/Programs/TurnPing/app/turnping-cli.exe hook gemini-cli"}]}]
   }
 }
 ```
@@ -109,8 +109,8 @@ See [EVENT_CONTRACTS.md](EVENT_CONTRACTS.md#generic-ingestion). Example: notify 
 long build finishes.
 
 ```powershell
-npm run build; if ($?) { agentping send --provider build --category TASK_COMPLETED --message "Build OK" }
-             else      { agentping send --provider build --category TASK_FAILED --message "Build failed" }
+npm run build; if ($?) { turnping send --provider build --category TASK_COMPLETED --message "Build OK" }
+             else      { turnping send --provider build --category TASK_FAILED --message "Build failed" }
 ```
 
 ## Adding a provider

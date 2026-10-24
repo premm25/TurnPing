@@ -1,17 +1,17 @@
 <#
 .SYNOPSIS
-  Build the AgentPing Windows distribution (dist\AgentPing\) and a zip archive.
+  Build the TurnPing Windows distribution (dist\TurnPing\) and a zip archive.
 
 .DESCRIPTION
   Creates/uses a virtual environment, installs pinned build dependencies, runs the
-  tests (unless -SkipTests), then builds with PyInstaller using packaging\agentping.spec.
+  tests (unless -SkipTests), then builds with PyInstaller using packaging\turnping.spec.
   The PyInstaller work directory is kept outside the repository (it can be large and
   this repo may live in a synced folder such as OneDrive).
 
   Output:
-    dist\AgentPing\AgentPing.exe       windowed desktop app
-    dist\AgentPing\agentping-cli.exe   console CLI used by agent hooks
-    dist\AgentPing-<version>-win64.zip
+    dist\TurnPing\TurnPing.exe       windowed desktop app
+    dist\TurnPing\turnping-cli.exe   console CLI used by agent hooks
+    dist\TurnPing-<version>-win64.zip
 
   The executables are NOT code-signed. See docs\INSTALLATION.md (SmartScreen).
 
@@ -21,7 +21,7 @@
 #>
 param(
     [string]$Python = "",
-    [string]$Venv = "$env:LOCALAPPDATA\AgentPing-build\venv",
+    [string]$Venv = "$env:LOCALAPPDATA\TurnPing-build\venv",
     [switch]$SkipTests
 )
 
@@ -51,20 +51,20 @@ if (-not $SkipTests) {
     Invoke-Checked $Py @("-m", "pytest", "-q", "-p", "no:cacheprovider")
 }
 
-$Version = (& $Py -c "import agentping; print(agentping.__version__)").Trim()
-$Work = "$env:LOCALAPPDATA\AgentPing-build\work"
-Write-Host "Building AgentPing $Version"
+$Version = (& $Py -c "import turnping; print(turnping.__version__)").Trim()
+$Work = "$env:LOCALAPPDATA\TurnPing-build\work"
+Write-Host "Building TurnPing $Version"
 Invoke-Checked $Py @("-m", "PyInstaller", "--noconfirm", "--clean", "--distpath", "dist",
-    "--workpath", $Work, "packaging\agentping.spec")
+    "--workpath", $Work, "packaging\turnping.spec")
 
-$Out = Join-Path $Root "dist\AgentPing"
-foreach ($exe in @("AgentPing.exe", "agentping-cli.exe")) {
+$Out = Join-Path $Root "dist\TurnPing"
+foreach ($exe in @("TurnPing.exe", "turnping-cli.exe")) {
     if (-not (Test-Path (Join-Path $Out $exe))) { throw "missing build output: $exe" }
 }
-Write-Host "Smoke test: agentping-cli --version"
-Invoke-Checked (Join-Path $Out "agentping-cli.exe") @("--version")
+Write-Host "Smoke test: turnping-cli --version"
+Invoke-Checked (Join-Path $Out "turnping-cli.exe") @("--version")
 
-$Zip = Join-Path $Root "dist\AgentPing-$Version-win64.zip"
+$Zip = Join-Path $Root "dist\TurnPing-$Version-win64.zip"
 if (Test-Path $Zip) { Remove-Item $Zip -Force }
 # Antivirus scanners and sync clients (e.g. OneDrive) briefly lock freshly built files.
 for ($attempt = 1; $attempt -le 6; $attempt++) {

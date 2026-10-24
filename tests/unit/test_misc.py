@@ -2,13 +2,13 @@ from pathlib import Path
 
 import pytest
 
-from agentping.contracts.events import AgentEvent, EventCategory, HostWindow, Priority
-from agentping.core.dispatcher import format_notification, open_uri
-from agentping.core.navigation import navigate, parse_open_uri
-from agentping.installation.validation import command_executable
-from agentping.launcher import shell_command
-from agentping.notifications.base import Notification
-from agentping.notifications.windows_toast import build_toast_xml
+from turnping.contracts.events import AgentEvent, EventCategory, HostWindow, Priority
+from turnping.core.dispatcher import format_notification, open_uri
+from turnping.core.navigation import navigate, parse_open_uri
+from turnping.installation.validation import command_executable
+from turnping.launcher import shell_command
+from turnping.notifications.base import Notification
+from turnping.notifications.windows_toast import build_toast_xml
 
 
 def ev(**kw):
@@ -26,12 +26,12 @@ def test_open_uri_roundtrip():
 @pytest.mark.parametrize(
     "uri",
     [
-        "agentping://open?event=../../etc",
-        "agentping://open?event=a&event=b",
-        "agentping://delete?event=abcdefgh12",
+        "turnping://open?event=../../etc",
+        "turnping://open?event=a&event=b",
+        "turnping://delete?event=abcdefgh12",
         "https://open?event=abcdefgh12",
-        "agentping://open?event=" + "a" * 300,
-        "agentping://open",
+        "turnping://open?event=" + "a" * 300,
+        "turnping://open",
         "",
     ],
 )
@@ -70,7 +70,7 @@ def test_toast_xml_escapes_and_uses_protocol_activation():
         attribution="p",
         priority=Priority.URGENT,
         category=EventCategory.PERMISSION_NEEDED,
-        launch_uri="agentping://open?event=abc12345",
+        launch_uri="turnping://open?event=abc12345",
     )
     xml = build_toast_xml(n)
     assert "<b>" not in xml and "&lt;b&gt;" in xml and "&amp; y" in xml
@@ -97,8 +97,8 @@ def test_toast_xml_normal_priority_no_reminder_scenario():
 
 def test_shell_command_quoting():
     assert (
-        shell_command(["C:\\py\\python.exe", "-I", "-m", "agentping", "hook", "x"])
-        == "C:/py/python.exe -I -m agentping hook x"
+        shell_command(["C:\\py\\python.exe", "-I", "-m", "turnping", "hook", "x"])
+        == "C:/py/python.exe -I -m turnping hook x"
     )
     assert (
         shell_command(["C:\\Program Files\\A\\a.exe", "hook"]) == '"C:/Program Files/A/a.exe" hook'
@@ -109,7 +109,7 @@ def test_shell_command_quoting():
     "command, exe",
     [
         ('"C:/Program Files/x.exe" -a', "C:/Program Files/x.exe"),
-        ("C:/py/python.exe -I -m agentping", "C:/py/python.exe"),
+        ("C:/py/python.exe -I -m turnping", "C:/py/python.exe"),
         ("", None),
     ],
 )
@@ -123,12 +123,12 @@ def test_navigation_without_host_reports_failure():
 
 
 def test_navigation_refuses_stale_window(monkeypatch):
-    monkeypatch.setattr("agentping.platform.windows._window_pid", lambda hwnd: 999)
-    monkeypatch.setattr("agentping.platform.windows.IS_WINDOWS", True)
+    monkeypatch.setattr("turnping.platform.windows._window_pid", lambda hwnd: 999)
+    monkeypatch.setattr("turnping.platform.windows.IS_WINDOWS", True)
     result = navigate(HostWindow(hwnd=1, pid=5, process_name="code.exe"), None)
     assert not result.ok and "another app" in result.detail
 
 
 def test_asset_icons_exist():
-    assets = Path(__file__).parents[2] / "src" / "agentping" / "desktop" / "assets"
-    assert (assets / "agentping.png").exists() and (assets / "agentping.ico").exists()
+    assets = Path(__file__).parents[2] / "src" / "turnping" / "desktop" / "assets"
+    assert (assets / "turnping.png").exists() and (assets / "turnping.ico").exists()

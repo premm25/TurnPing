@@ -3,12 +3,12 @@ VSVersionInfo(
                     fileType=0x1, subtype=0x0, date=(0, 0)),
   kids=[
     StringFileInfo([StringTable('040904B0', [
-      StringStruct('CompanyName', 'AgentPing contributors'),
-      StringStruct('FileDescription', 'AgentPing - desktop notifications for AI coding agents'),
+      StringStruct('CompanyName', 'TurnPing contributors'),
+      StringStruct('FileDescription', 'TurnPing - desktop notifications for AI coding agents'),
       StringStruct('FileVersion', '0.1.0'),
-      StringStruct('InternalName', 'AgentPing'),
+      StringStruct('InternalName', 'TurnPing'),
       StringStruct('LegalCopyright', 'MIT License'),
-      StringStruct('ProductName', 'AgentPing'),
+      StringStruct('ProductName', 'TurnPing'),
       StringStruct('ProductVersion', '0.1.0')])]),
     VarFileInfo([VarStruct('Translation', [1033, 1200])])
   ]

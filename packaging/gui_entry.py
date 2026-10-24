@@ -1,5 +1,5 @@
-"""PyInstaller entry for AgentPing.exe (windowed)."""
+"""PyInstaller entry for TurnPing.exe (windowed)."""
 
-from agentping.cli import gui_main
+from turnping.cli import gui_main
 
 raise SystemExit(gui_main())

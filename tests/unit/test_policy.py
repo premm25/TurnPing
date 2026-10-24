@@ -1,9 +1,9 @@
 from datetime import UTC, datetime
 
-from agentping.config import AppConfig, ProviderConfig
-from agentping.contracts.events import AgentEvent, EventCategory, Priority
-from agentping.core.policy import Action, PolicyContext, decide
-from agentping.core.session_manager import SessionState
+from turnping.config import AppConfig, ProviderConfig
+from turnping.contracts.events import AgentEvent, EventCategory, Priority
+from turnping.core.policy import Action, PolicyContext, decide
+from turnping.core.session_manager import SessionState
 
 NOON = datetime(2026, 10, 24, 12, 0, tzinfo=UTC)
 

@@ -4,16 +4,16 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")  # no real desktop needed
 
 import pytest
 
-from agentping.core.engine import Engine
-from agentping.runtime import build_runtime
 from tests.conftest import FakeBackend
+from turnping.core.engine import Engine
+from turnping.runtime import build_runtime
 
 
 @pytest.fixture
 def stack(qtbot):
     """A real runtime + engine + controller with the OS toast replaced by a fake."""
-    from agentping.desktop.controller import Controller
-    from agentping.desktop.popup import PopupBackend, PopupBridge, PopupManager
+    from turnping.desktop.controller import Controller
+    from turnping.desktop.popup import PopupBackend, PopupBridge, PopupManager
 
     runtime = build_runtime(toast=False)
     toast = FakeBackend("toast")

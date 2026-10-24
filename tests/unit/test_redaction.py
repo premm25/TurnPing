@@ -1,6 +1,6 @@
 import pytest
 
-from agentping.security.redaction import (
+from turnping.security.redaction import (
     describe_payload_shape,
     redact_mapping,
     redact_text,

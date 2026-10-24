@@ -1,12 +1,12 @@
-# Contributing to AgentPing
+# Contributing to TurnPing
 
-Thanks for helping! AgentPing aims to be small, reliable and honest about what it supports.
+Thanks for helping! TurnPing aims to be small, reliable and honest about what it supports.
 
 ## Setup
 
 ```powershell
-py -3 -m venv C:\venvs\agentping          # keep venvs out of synced folders (OneDrive)
-C:\venvs\agentping\Scripts\pip install -e ".[dev]"
+py -3 -m venv C:\venvs\turnping          # keep venvs out of synced folders (OneDrive)
+C:\venvs\turnping\Scripts\pip install -e ".[dev]"
 ```
 
 ## Before opening a pull request
@@ -25,7 +25,7 @@ All must pass; CI runs the same on Windows with Python 3.12–3.14.
 - **Tests first-class.** Every bug fix gets a regression test. Don't weaken or skip tests
   to get green.
 - **Never touch the developer's real environment in tests.** The `isolated_home`
-  fixture redirects `AGENTPING_HOME` and `AGENTPING_USER_HOME`; registry writes and OS
+  fixture redirects `TURNPING_HOME` and `TURNPING_USER_HOME`; registry writes and OS
   toasts must be mocked.
 - **Semantics over convenience.** Map provider events only to categories the source
   documents. "Response finished" is not "task completed".
@@ -38,7 +38,7 @@ All must pass; CI runs the same on Windows with Python 3.12–3.14.
 
 ## Releases
 
-Maintainers bump `version` in `pyproject.toml` and `src/agentping/__init__.py`, update
+Maintainers bump `version` in `pyproject.toml` and `src/turnping/__init__.py`, update
 `CHANGELOG.md` and `packaging/version_info.txt`, and push a `vX.Y.Z` tag. The release
 workflow builds the zip and creates a **draft** release for manual review.
 

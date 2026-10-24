@@ -19,27 +19,27 @@ OUT = ROOT / "assets" / "screenshots"
 
 
 def main() -> int:
-    os.environ["AGENTPING_HOME"] = tempfile.mkdtemp(prefix="agentping-shots-")
-    os.environ["AGENTPING_USER_HOME"] = tempfile.mkdtemp(prefix="agentping-shots-user-")
+    os.environ["TURNPING_HOME"] = tempfile.mkdtemp(prefix="turnping-shots-")
+    os.environ["TURNPING_USER_HOME"] = tempfile.mkdtemp(prefix="turnping-shots-user-")
 
     from PySide6.QtWidgets import QApplication
 
-    from agentping.adapters.claude_code import ClaudeCodeAdapter
-    from agentping.adapters.codex import CodexAdapter
-    from agentping.contracts.events import EventCategory, HostWindow, Priority
-    from agentping.core.engine import Engine
-    from agentping.desktop import theme
-    from agentping.desktop.controller import Controller
-    from agentping.desktop.main_window import MainWindow
-    from agentping.desktop.popup import PopupWidget
-    from agentping.notifications.base import (
+    from turnping.adapters.claude_code import ClaudeCodeAdapter
+    from turnping.adapters.codex import CodexAdapter
+    from turnping.contracts.events import EventCategory, HostWindow, Priority
+    from turnping.core.engine import Engine
+    from turnping.desktop import theme
+    from turnping.desktop.controller import Controller
+    from turnping.desktop.main_window import MainWindow
+    from turnping.desktop.popup import PopupWidget
+    from turnping.notifications.base import (
         BackendStatus,
         DeliveryResult,
         DeliveryStatus,
         Notification,
         NotificationBackend,
     )
-    from agentping.runtime import build_runtime
+    from turnping.runtime import build_runtime
 
     class DemoToast(NotificationBackend):
         name = "windows-toast"

@@ -3,7 +3,7 @@ from datetime import UTC, datetime, timedelta, timezone
 import pytest
 from pydantic import ValidationError
 
-from agentping.contracts.events import AgentEvent, EventCategory, HostWindow, Priority
+from turnping.contracts.events import AgentEvent, EventCategory, HostWindow, Priority
 
 
 def make(**kw):

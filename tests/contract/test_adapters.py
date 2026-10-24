@@ -1,4 +1,4 @@
-"""Contract tests: documented provider payloads -> AgentPing events.
+"""Contract tests: documented provider payloads -> TurnPing events.
 
 Fixtures in tests/fixtures/<provider>/ are copied from (or minimally adapted from) the
 examples in each provider's official hook documentation, checked 2026-10-24.
@@ -8,14 +8,14 @@ import json
 
 import pytest
 
-from agentping.adapters.base import AdapterError, AdapterOptions
-from agentping.adapters.claude_code import ClaudeCodeAdapter
-from agentping.adapters.codex import CodexAdapter
-from agentping.adapters.gemini_cli import GeminiCliAdapter
-from agentping.adapters.generic import GenericAdapter
-from agentping.adapters.registry import BUILTIN_PROVIDER_IDS, AdapterRegistry
-from agentping.contracts.events import EventCategory as C
 from tests.conftest import FIXTURES, load_fixture
+from turnping.adapters.base import AdapterError, AdapterOptions
+from turnping.adapters.claude_code import ClaudeCodeAdapter
+from turnping.adapters.codex import CodexAdapter
+from turnping.adapters.gemini_cli import GeminiCliAdapter
+from turnping.adapters.generic import GenericAdapter
+from turnping.adapters.registry import BUILTIN_PROVIDER_IDS, AdapterRegistry
+from turnping.contracts.events import EventCategory as C
 
 SENSITIVE_SNIPPETS = [
     "rm -rf",

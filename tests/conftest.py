@@ -7,22 +7,22 @@ from typing import Any
 
 import pytest
 
-from agentping.config import AppConfig
-from agentping.contracts.events import AgentEvent, EventCategory
-from agentping.core.dispatcher import Dispatcher
-from agentping.core.reminders import ReminderScheduler
-from agentping.core.router import EventRouter
-from agentping.notifications.base import (
+from turnping.config import AppConfig
+from turnping.contracts.events import AgentEvent, EventCategory
+from turnping.core.dispatcher import Dispatcher
+from turnping.core.reminders import ReminderScheduler
+from turnping.core.router import EventRouter
+from turnping.notifications.base import (
     BackendStatus,
     DeliveryResult,
     DeliveryStatus,
     Notification,
     NotificationBackend,
 )
-from agentping.notifications.manager import NotificationManager
-from agentping.notifications.sound import SilentPlayer
-from agentping.storage.database import Database
-from agentping.storage.repository import Repository
+from turnping.notifications.manager import NotificationManager
+from turnping.notifications.sound import SilentPlayer
+from turnping.storage.database import Database
+from turnping.storage.repository import Repository
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -33,12 +33,12 @@ def load_fixture(provider: str, name: str) -> dict[str, Any]:
 
 @pytest.fixture(autouse=True)
 def isolated_home(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
-    """Every test gets its own AgentPing data dir and fake user home."""
-    home = tmp_path / "agentping-home"
+    """Every test gets its own TurnPing data dir and fake user home."""
+    home = tmp_path / "turnping-home"
     user = tmp_path / "user-home"
     user.mkdir()
-    monkeypatch.setenv("AGENTPING_HOME", str(home))
-    monkeypatch.setenv("AGENTPING_USER_HOME", str(user))
+    monkeypatch.setenv("TURNPING_HOME", str(home))
+    monkeypatch.setenv("TURNPING_USER_HOME", str(user))
     return home
 
 

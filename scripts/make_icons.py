@@ -1,4 +1,4 @@
-"""Render the AgentPing icon to PNG/ICO assets (run after changing desktop/theme.py)."""
+"""Render the TurnPing icon to PNG/ICO assets (run after changing desktop/theme.py)."""
 
 from __future__ import annotations
 
@@ -7,10 +7,10 @@ from pathlib import Path
 
 from PySide6.QtGui import QGuiApplication, QImageWriter
 
-from agentping.desktop.theme import draw_logo
+from turnping.desktop.theme import draw_logo
 
 ROOT = Path(__file__).resolve().parents[1]
-PKG_ASSETS = ROOT / "src" / "agentping" / "desktop" / "assets"
+PKG_ASSETS = ROOT / "src" / "turnping" / "desktop" / "assets"
 REPO_ASSETS = ROOT / "assets" / "icons"
 
 
@@ -18,14 +18,14 @@ def main() -> int:
     QGuiApplication([*sys.argv[:1], "-platform", "offscreen"])
     PKG_ASSETS.mkdir(parents=True, exist_ok=True)
     REPO_ASSETS.mkdir(parents=True, exist_ok=True)
-    draw_logo(256).save(str(PKG_ASSETS / "agentping.png"))
+    draw_logo(256).save(str(PKG_ASSETS / "turnping.png"))
     for size in (16, 32, 48, 64, 128, 256, 512):
-        draw_logo(size).save(str(REPO_ASSETS / f"agentping-{size}.png"))
+        draw_logo(size).save(str(REPO_ASSETS / f"turnping-{size}.png"))
     if b"ico" not in [bytes(f) for f in QImageWriter.supportedImageFormats()]:
         print("Qt ICO writer unavailable; skipping .ico", file=sys.stderr)
         return 1
     # Qt writes a single-image ICO; Windows scales it. 256px keeps it crisp.
-    draw_logo(256).save(str(PKG_ASSETS / "agentping.ico"))
+    draw_logo(256).save(str(PKG_ASSETS / "turnping.ico"))
     print(f"wrote icons to {PKG_ASSETS} and {REPO_ASSETS}")
     return 0
 

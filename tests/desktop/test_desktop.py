@@ -2,9 +2,9 @@
 
 import threading
 
-from agentping.config import load_config
-from agentping.contracts.events import AgentEvent, EventCategory, Priority
-from agentping.notifications.base import Notification
+from turnping.config import load_config
+from turnping.contracts.events import AgentEvent, EventCategory, Priority
+from turnping.notifications.base import Notification
 
 
 def ev(**kw):
@@ -17,7 +17,7 @@ def ev(**kw):
 
 
 def test_main_window_pages_and_dashboard_render(qtbot, stack):
-    from agentping.desktop.main_window import MainWindow
+    from turnping.desktop.main_window import MainWindow
 
     _runtime, engine, controller, toast, _ = stack
     window = MainWindow(controller)
@@ -35,7 +35,7 @@ def test_main_window_pages_and_dashboard_render(qtbot, stack):
 
 
 def test_closing_window_hides_to_tray_by_default(qtbot, stack):
-    from agentping.desktop.main_window import MainWindow
+    from turnping.desktop.main_window import MainWindow
 
     _, _, controller, _, _ = stack
     window = MainWindow(controller)
@@ -60,13 +60,11 @@ def test_pause_resume_through_controller(qtbot, stack):
 
 
 def test_settings_persist_and_apply(qtbot, stack, monkeypatch):
-    from agentping.desktop.settings_window import SettingsPage
+    from turnping.desktop.settings_window import SettingsPage
 
     runtime, _, controller, _, _ = stack
-    monkeypatch.setattr(
-        "agentping.installation.system.set_start_with_windows", lambda enabled: None
-    )
-    monkeypatch.setattr("agentping.installation.system.start_with_windows_enabled", lambda: False)
+    monkeypatch.setattr("turnping.installation.system.set_start_with_windows", lambda enabled: None)
+    monkeypatch.setattr("turnping.installation.system.start_with_windows_enabled", lambda: False)
     page = SettingsPage(controller)
     qtbot.addWidget(page)
     page.backend.setCurrentIndex(page.backend.findData("popup"))
@@ -92,7 +90,7 @@ def test_settings_persist_and_apply(qtbot, stack, monkeypatch):
 
 
 def test_settings_restore_defaults_does_not_save_until_clicked(qtbot, stack):
-    from agentping.desktop.settings_window import SettingsPage
+    from turnping.desktop.settings_window import SettingsPage
 
     runtime, _, controller, _, _ = stack
     page = SettingsPage(controller)
@@ -103,10 +101,10 @@ def test_settings_restore_defaults_does_not_save_until_clicked(qtbot, stack):
 
 def test_popup_fallback_shows_and_dismisses(qtbot, stack):
     _runtime, _, controller, toast, popups = stack
-    toast.available = False  # Windows toasts turned off -> AgentPing popups
+    toast.available = False  # Windows toasts turned off -> TurnPing popups
     result = controller.process_and_wait(ev(session_id="pop"))
     assert result.delivery.status.value == "dispatched"
-    assert result.delivery.backend == "agentping-popup"
+    assert result.delivery.backend == "turnping-popup"
     qtbot.waitUntil(lambda: popups.visible_count == 1, timeout=3000)
     widget = popups._popups[0]
     with qtbot.waitSignal(popups.dismiss_event, timeout=2000) as blocker:
@@ -139,7 +137,7 @@ def test_popup_text_is_plain_not_html(qtbot, stack):
     from PySide6.QtCore import Qt
     from PySide6.QtWidgets import QLabel
 
-    from agentping.desktop.popup import PopupWidget
+    from turnping.desktop.popup import PopupWidget
 
     widget = PopupWidget(
         Notification(
@@ -160,7 +158,7 @@ def test_popup_text_is_plain_not_html(qtbot, stack):
 
 
 def test_tray_state(qtbot):
-    from agentping.desktop.tray import Tray
+    from turnping.desktop.tray import Tray
 
     tray = Tray()
     tray.set_state(paused=True, attention=0)
@@ -175,8 +173,8 @@ def test_tray_state(qtbot):
 
 
 def test_session_dialog_with_partial_data(qtbot, stack):
-    from agentping.desktop.controller import SessionDetails
-    from agentping.desktop.session_dialog import SessionDialog
+    from turnping.desktop.controller import SessionDetails
+    from turnping.desktop.session_dialog import SessionDialog
 
     dialog = SessionDialog(SessionDetails(None, None, "no window was recorded"))
     qtbot.addWidget(dialog)
@@ -184,7 +182,7 @@ def test_session_dialog_with_partial_data(qtbot, stack):
 
 
 def test_background_work_runs_off_gui_thread(qtbot):
-    from agentping.desktop.workers import run_async
+    from turnping.desktop.workers import run_async
 
     seen = {}
     main = threading.current_thread()
@@ -199,11 +197,11 @@ def test_send_test_notification_from_ui(qtbot, stack):
     controller.send_test("TASK_COMPLETED", lambda r: box.setdefault("r", r))
     qtbot.waitUntil(lambda: "r" in box, timeout=5000)
     assert box["r"].delivery.status.value == "confirmed"
-    assert toast.shown[-1].title == "AgentPing completed a task"
+    assert toast.shown[-1].title == "TurnPing completed a task"
 
 
 def test_theme_stylesheets_build():
-    from agentping.desktop import theme
+    from turnping.desktop import theme
 
     assert "QPushButton" in theme.stylesheet(theme.LIGHT)
     assert "QPushButton" in theme.stylesheet(theme.DARK)

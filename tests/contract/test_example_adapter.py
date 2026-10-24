@@ -3,9 +3,9 @@
 import importlib.util
 from pathlib import Path
 
-from agentping.adapters.registry import AdapterRegistry
-from agentping.core.policy import Action
 from tests.conftest import Harness
+from turnping.adapters.registry import AdapterRegistry
+from turnping.core.policy import Action
 
 EXAMPLE = Path(__file__).parents[2] / "docs" / "examples" / "example_adapter.py"
 

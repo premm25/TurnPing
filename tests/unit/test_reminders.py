@@ -1,8 +1,8 @@
 from datetime import UTC, datetime, timedelta
 
-from agentping.config import RemindersConfig
-from agentping.contracts.events import AgentEvent, EventCategory
-from agentping.core.reminders import ReminderScheduler
+from turnping.config import RemindersConfig
+from turnping.contracts.events import AgentEvent, EventCategory
+from turnping.core.reminders import ReminderScheduler
 
 T0 = datetime(2026, 10, 24, 12, 0, tzinfo=UTC)
 

@@ -2,19 +2,10 @@
 
 ## Naming
 
-"AgentPing" is a **provisional** name. As of 2026-10-24:
-
-- PyPI `agentping` is taken (an MCP server bridging agents to an "AgentPing" service), so
-  this package is named `agentping-desktop`, but the import name `agentping` would still
-  clash if both were installed.
-- GitHub has several projects with this name, including
-  [ericermerimen/agentping](https://github.com/ericermerimen/agentping), a macOS menu-bar
-  app for Claude Code sessions in the same space, and an `agent-ping` organization with
-  Claude Code integrations.
-- `agentping.dev` / `agentping.com` could not be checked from the build environment.
-
-**Recommendation:** pick a distinct name before any public release or package upload,
-then rename the package, the `APP_ID` (toast identity) and the URI scheme.
+The project was renamed from "AgentPing" to **TurnPing** before its first public release,
+because "AgentPing" was already used on PyPI and by similar projects on GitHub. As of
+2026-10-24, `turnping` was free on PyPI and no GitHub repositories used the name.
+Trademarks and domains have not been checked.
 
 ## Near term
 

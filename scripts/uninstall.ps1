@@ -1,15 +1,15 @@
 <#
 .SYNOPSIS
-  Uninstall AgentPing for the current user.
+  Uninstall TurnPing for the current user.
 
 .DESCRIPTION
   1. Asks the running app to exit.
-  2. Removes ONLY AgentPing's hooks from Claude Code, Codex and Gemini CLI settings
+  2. Removes ONLY TurnPing's hooks from Claude Code, Codex and Gemini CLI settings
      (backups are taken first; other tools' hooks and settings are preserved).
-  3. Removes the per-user registrations (agentping:// handler, toast app id, sign-in
+  3. Removes the per-user registrations (turnping:// handler, toast app id, sign-in
      startup entry).
   4. Removes the program files and Start menu shortcut.
-  History and preferences in %LOCALAPPDATA%\AgentPing are kept unless -PurgeData is
+  History and preferences in %LOCALAPPDATA%\TurnPing are kept unless -PurgeData is
   given. Backups of agent settings are always preserved (moved next to the data folder
   when purging). Your projects are never touched.
 
@@ -19,13 +19,13 @@
 #>
 param(
     [switch]$PurgeData,
-    [string]$InstallDir = "$env:LOCALAPPDATA\Programs\AgentPing"
+    [string]$InstallDir = "$env:LOCALAPPDATA\Programs\TurnPing"
 )
 
 $ErrorActionPreference = "Stop"
 $Candidates = @(
-    (Join-Path $InstallDir "app\agentping-cli.exe"),
-    (Join-Path $InstallDir "venv\Scripts\agentping.exe")
+    (Join-Path $InstallDir "app\turnping-cli.exe"),
+    (Join-Path $InstallDir "venv\Scripts\turnping.exe")
 )
 $Cli = $Candidates | Where-Object { Test-Path $_ } | Select-Object -First 1
 
@@ -35,16 +35,16 @@ if ($Cli) {
     $UninstallArgs = @("uninstall")
     if ($PurgeData) { $UninstallArgs += "--purge-data" }
     & $Cli @UninstallArgs
-    if ($LASTEXITCODE -ne 0) { Write-Warning "agentping uninstall reported a problem (see above)." }
+    if ($LASTEXITCODE -ne 0) { Write-Warning "turnping uninstall reported a problem (see above)." }
 } else {
-    Write-Warning "AgentPing program not found in $InstallDir; skipping hook removal."
-    Write-Warning "If you installed from source elsewhere, run: agentping uninstall"
+    Write-Warning "TurnPing program not found in $InstallDir; skipping hook removal."
+    Write-Warning "If you installed from source elsewhere, run: turnping uninstall"
 }
 
-$Shortcut = Join-Path ([Environment]::GetFolderPath("Programs")) "AgentPing.lnk"
+$Shortcut = Join-Path ([Environment]::GetFolderPath("Programs")) "TurnPing.lnk"
 if (Test-Path $Shortcut) { Remove-Item -Force $Shortcut }
 if (Test-Path $InstallDir) {
     Remove-Item -Recurse -Force $InstallDir
     Write-Host "Removed program files: $InstallDir"
 }
-Write-Host "AgentPing has been uninstalled."
+Write-Host "TurnPing has been uninstalled."

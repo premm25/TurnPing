@@ -21,7 +21,7 @@ dist/
 Thumbs.db
 desktop.ini
 
-# Local AgentPing data must never be committed
+# Local TurnPing data must never be committed
 *.db
 *.db-wal
 *.db-shm

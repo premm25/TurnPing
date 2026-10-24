@@ -7,15 +7,15 @@ import sys
 
 import pytest
 
-from agentping.config import AppConfig, save_config
-from agentping.hook import MAX_STDIN_BYTES, parse_payload, run_hook
-from agentping.ingest.ipc import IpcServer
-from agentping.ingest.spool import Spool
-from agentping.notifications.base import DeliveryResult, DeliveryStatus
-from agentping.security.paths import get_paths
-from agentping.storage.database import Database
-from agentping.storage.repository import Repository
 from tests.conftest import load_fixture
+from turnping.config import AppConfig, save_config
+from turnping.hook import MAX_STDIN_BYTES, parse_payload, run_hook
+from turnping.ingest.ipc import IpcServer
+from turnping.ingest.spool import Spool
+from turnping.notifications.base import DeliveryResult, DeliveryStatus
+from turnping.security.paths import get_paths
+from turnping.storage.database import Database
+from turnping.storage.repository import Repository
 
 
 def stdin_for(payload) -> io.BytesIO:
@@ -57,7 +57,7 @@ def test_hook_headless_when_app_not_running_and_launch_disabled(monkeypatch):
     no_launch_config()
     # The OS toast is mocked: CI machines (and this dev box) may have notifications off.
     monkeypatch.setattr(
-        "agentping.runtime.WindowsToastBackend.show",
+        "turnping.runtime.WindowsToastBackend.show",
         lambda self, n: DeliveryResult(DeliveryStatus.DISPATCHED, "mock", "mocked toast"),
     )
     _, how = run_hook(
@@ -75,7 +75,7 @@ def test_hook_headless_when_app_not_running_and_launch_disabled(monkeypatch):
 def test_hook_spools_and_launches_app_when_not_running(monkeypatch):
     launched = []
     monkeypatch.setattr(
-        "agentping.hook._launch_app_with_args", lambda args: launched.append(args) or True
+        "turnping.hook._launch_app_with_args", lambda args: launched.append(args) or True
     )
     _, how = run_hook(
         "claude-code", stdin=stdin_for(load_fixture("claude_code", "stop")), capture_host=False
@@ -88,7 +88,7 @@ def test_hook_spools_and_launches_app_when_not_running(monkeypatch):
 def test_launch_lock_prevents_spawn_storm(monkeypatch):
     launched = []
     monkeypatch.setattr(
-        "agentping.hook._launch_app_with_args", lambda args: launched.append(args) or True
+        "turnping.hook._launch_app_with_args", lambda args: launched.append(args) or True
     )
     for _ in range(3):
         run_hook(
@@ -170,12 +170,12 @@ def test_hook_subprocess_end_to_end(app_server, isolated_home, user_home):
     """
     no_launch_config()
     env = {
-        "AGENTPING_HOME": str(isolated_home),
-        "AGENTPING_USER_HOME": str(user_home),
+        "TURNPING_HOME": str(isolated_home),
+        "TURNPING_USER_HOME": str(user_home),
         "SYSTEMROOT": __import__("os").environ.get("SYSTEMROOT", ""),
     }
     proc = subprocess.run(
-        [sys.executable, "-I", "-m", "agentping", "hook", "claude-code"],
+        [sys.executable, "-I", "-m", "turnping", "hook", "claude-code"],
         input=json.dumps(load_fixture("claude_code", "notification_permission")).encode(),
         capture_output=True,
         timeout=60,
@@ -192,12 +192,12 @@ def test_hook_subprocess_end_to_end(app_server, isolated_home, user_home):
 def test_gemini_hook_subprocess_stdout_is_pure_json(app_server, isolated_home, user_home):
     no_launch_config()
     env = {
-        "AGENTPING_HOME": str(isolated_home),
-        "AGENTPING_USER_HOME": str(user_home),
+        "TURNPING_HOME": str(isolated_home),
+        "TURNPING_USER_HOME": str(user_home),
         "SYSTEMROOT": __import__("os").environ.get("SYSTEMROOT", ""),
     }
     proc = subprocess.run(
-        [sys.executable, "-I", "-m", "agentping", "hook", "gemini-cli"],
+        [sys.executable, "-I", "-m", "turnping", "hook", "gemini-cli"],
         input=json.dumps(load_fixture("gemini_cli", "after_agent")).encode(),
         capture_output=True,
         timeout=60,
@@ -212,7 +212,7 @@ def test_gemini_hook_subprocess_stdout_is_pure_json(app_server, isolated_home, u
 def test_local_appdata_resolved_without_environment():
     import os
 
-    from agentping.security.paths import _windows_local_appdata, current_user
+    from turnping.security.paths import _windows_local_appdata, current_user
 
     assert _windows_local_appdata().lower() == os.environ["LOCALAPPDATA"].lower()
     assert current_user().lower() == os.environ["USERNAME"].lower()

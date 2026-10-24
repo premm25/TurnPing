@@ -3,16 +3,14 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-# NOTE: the bare name "agentping" is already taken on PyPI by an unrelated
-# project. See docs/ROADMAP.md ("Naming") before publishing anywhere.
-name = "agentping-desktop"
+name = "turnping"
 version = "0.1.0"
 description = "One ping. Every agent. Local-first desktop notifications for AI coding agents."
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.12"
-authors = [{ name = "AgentPing contributors" }]
+authors = [{ name = "TurnPing contributors" }]
 keywords = ["notifications", "claude-code", "codex", "gemini-cli", "developer-tools", "windows"]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -45,23 +43,23 @@ dev = [
 ]
 
 [project.scripts]
-agentping = "agentping.cli:main"
+turnping = "turnping.cli:main"
 
 [project.gui-scripts]
-agentping-app = "agentping.cli:gui_main"
+turnping-app = "turnping.cli:gui_main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-agentping = ["desktop/assets/*.png", "desktop/assets/*.ico"]
+turnping = ["desktop/assets/*.png", "desktop/assets/*.ico"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
 markers = [
     "windows: requires a real Windows desktop session",
-    "real_os: touches real OS facilities (registry, notifications); opt-in via AGENTPING_REAL_OS_TESTS=1",
+    "real_os: touches real OS facilities (registry, notifications); opt-in via TURNPING_REAL_OS_TESTS=1",
 ]
 
 [tool.ruff]
@@ -84,11 +82,11 @@ max-line-length = 120  # the formatter wraps code at 100; long literals may run 
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["S", "B011"]
-"src/agentping/desktop/theme.py" = ["E501"]  # Qt stylesheet rules read best on one line
+"src/turnping/desktop/theme.py" = ["E501"]  # Qt stylesheet rules read best on one line
 
 [tool.mypy]
 python_version = "3.12"
-files = ["src/agentping"]
+files = ["src/turnping"]
 warn_unused_ignores = true
 warn_redundant_casts = true
 ignore_missing_imports = true

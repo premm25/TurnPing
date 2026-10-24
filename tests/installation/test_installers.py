@@ -5,14 +5,14 @@ import os
 
 import pytest
 
-from agentping.installation.backups import list_backups
-from agentping.installation.hooks import (
+from turnping.installation.backups import list_backups
+from turnping.installation.hooks import (
     ClaudeCodeInstaller,
     CodexInstaller,
     GeminiCliInstaller,
     IntegrationStatus,
 )
-from agentping.security.paths import get_paths
+from turnping.security.paths import get_paths
 
 # Shape of a real user's existing settings: another tool's hooks on many events.
 OTHER_TOOL = '"C:/Users/me/projects/Other/.venv/Scripts/python.exe" -I -m other.hooks.claude'
@@ -90,7 +90,7 @@ def test_install_into_missing_file_and_uninstall_leaves_valid_json(claude):
     assert report.ok and report.backup is None
     assert claude.installed_events(read(path))
     claude.uninstall()
-    assert read(path) == {"hooks": {}}  # valid, empty; AgentPing entries gone
+    assert read(path) == {"hooks": {}}  # valid, empty; TurnPing entries gone
 
 
 def test_preexisting_empty_hooks_object_is_kept(claude):
@@ -175,7 +175,7 @@ def test_status_lifecycle(claude, monkeypatch):
     # A hook command pointing to a program that no longer exists is misconfigured.
     data = read(claude.config_path())
     data["hooks"]["Stop"][-1]["hooks"][0]["command"] = (
-        "C:/gone/python.exe -I -m agentping hook claude-code"
+        "C:/gone/python.exe -I -m turnping hook claude-code"
     )
     write_settings(claude.config_path(), data)
     assert claude.status().status is IntegrationStatus.MISCONFIGURED
@@ -243,7 +243,7 @@ def test_gemini_installer_uses_ms_timeouts_and_preserves_settings(user_home):
     data = read(gemini.config_path())
     assert data["theme"] == "GitHub"
     handler = data["hooks"]["AfterAgent"][0]["hooks"][0]
-    assert handler["timeout"] == 10000 and handler["name"] == "agentping-after-agent"
+    assert handler["timeout"] == 10000 and handler["name"] == "turnping-after-agent"
     assert "AfterTool" not in data["hooks"]  # no per-tool sync hook (latency)
     gemini.uninstall()
     assert read(gemini.config_path()) == {"theme": "GitHub", "hooks": {}}

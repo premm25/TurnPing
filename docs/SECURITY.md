@@ -4,7 +4,7 @@ To report a vulnerability, see the root [SECURITY.md](../SECURITY.md).
 
 ## Threat model
 
-AgentPing runs as the logged-in user and handles data written by coding agents (which
+TurnPing runs as the logged-in user and handles data written by coding agents (which
 may contain secrets, code or attacker-influenced text) and by other local processes. Its
 goals:
 
@@ -26,7 +26,7 @@ agent configs directly), and the security of the coding agents themselves.
 | Redaction | All free text and every log line pass through `security/redaction.py` (API keys, GitHub/Slack/AWS/Google tokens, JWTs, private keys, `password=`/`token:`/`Bearer` patterns). Hook failures log the payload *shape* only. |
 | Local IPC | Named pipe only (no TCP/UDP listener). HMAC challenge/response in both directions using a 32-byte random key in the user profile. Authentication happens before any data is read. JSON over `send_bytes`/`recv_bytes`; pickle-based `recv()` is never used. 64 KiB message cap, 8 concurrent clients, 2 s read timeout. |
 | Input bounds | Hook stdin capped at 8 MiB (oversized payloads keep only routing fields). Metadata ≤ 16 scalar keys. Strings length-limited. Bounded engine queue (1000), spool (200 files of ≤ 16 KiB, stale after 6 h) and history (retention + row cap). |
-| Click-to-return | `agentping://open?event=<id>` accepts exactly one strictly validated id and nothing else. The focused window is verified by process id so a recycled window handle is never focused. |
+| Click-to-return | `turnping://open?event=<id>` accepts exactly one strictly validated id and nothing else. The focused window is verified by process id so a recycled window handle is never focused. |
 | Config edits | Parse-or-refuse, backup, preserve unrelated content, atomic write, concurrent-change detection, verify-or-restore. |
 | Privileges | Per-user only (HKCU, `%LOCALAPPDATA%`). No elevation, services or drivers. |
 | Telemetry | None. The only network activity is whatever the agents themselves do. |
@@ -39,7 +39,7 @@ Action Center (an OS database). This is why message previews are opt-in.
 ## Known limitations
 
 - Any process running as the same user can read `ipc.key` and send events, so it could
-  show fake notifications. It can't execute code through AgentPing. Same-user isolation
+  show fake notifications. It can't execute code through TurnPing. Same-user isolation
   is not a Windows security boundary.
 - Window titles of the hosting terminal/editor are stored for click-to-return. They can
   include a file or folder name.

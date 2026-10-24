@@ -7,9 +7,10 @@ from multiprocessing.connection import Client, answer_challenge, deliver_challen
 
 import pytest
 
-from agentping.contracts.events import AgentEvent, EventCategory
-from agentping.core.engine import Engine
-from agentping.ingest.ipc import (
+from tests.conftest import Harness
+from turnping.contracts.events import AgentEvent, EventCategory
+from turnping.core.engine import Engine
+from turnping.ingest.ipc import (
     MAX_MESSAGE_BYTES,
     AlreadyRunningError,
     IpcServer,
@@ -18,9 +19,8 @@ from agentping.ingest.ipc import (
     pipe_address,
     send_message,
 )
-from agentping.ingest.spool import MAX_FILES, Spool
-from agentping.security.paths import get_paths
-from tests.conftest import Harness
+from turnping.ingest.spool import MAX_FILES, Spool
+from turnping.security.paths import get_paths
 
 
 def ev(**kw):
@@ -48,7 +48,7 @@ def test_engine_processes_events_off_thread_and_stops_cleanly():
     engine.start()
     assert engine.submit(ev())
     assert wait_for(lambda: engine.processed == 1)
-    assert seen == ["agentping-engine"]
+    assert seen == ["turnping-engine"]
     engine.stop()
     assert not engine.running
 
@@ -195,5 +195,5 @@ def test_ipc_handler_exception_returns_error():
 
 def test_pipe_names_isolated_per_data_dir(tmp_path, monkeypatch):
     a = pipe_address()
-    monkeypatch.setenv("AGENTPING_HOME", str(tmp_path / "other"))
+    monkeypatch.setenv("TURNPING_HOME", str(tmp_path / "other"))
     assert pipe_address() != a

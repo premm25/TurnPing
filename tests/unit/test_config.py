@@ -3,7 +3,7 @@ from datetime import time
 import pytest
 from pydantic import ValidationError
 
-from agentping.config import (
+from turnping.config import (
     AppConfig,
     QuietHoursConfig,
     RemindersConfig,
@@ -11,7 +11,7 @@ from agentping.config import (
     quarantine_broken_config,
     save_config,
 )
-from agentping.contracts.events import EventCategory, Priority
+from turnping.contracts.events import EventCategory, Priority
 
 
 def test_defaults_are_valid_and_complete():

@@ -1,15 +1,15 @@
 """Adapter -> router -> notification backend, with a mocked OS backend."""
 
-from agentping.adapters.claude_code import ClaudeCodeAdapter
-from agentping.config import AppConfig
-from agentping.contracts.events import EventCategory as C
-from agentping.contracts.events import HostWindow
-from agentping.core.policy import Action
-from agentping.core.session_manager import SessionState
-from agentping.notifications.base import DeliveryStatus
-from agentping.notifications.manager import NotificationManager
-from agentping.notifications.sound import SilentPlayer
 from tests.conftest import FakeBackend, Harness, load_fixture
+from turnping.adapters.claude_code import ClaudeCodeAdapter
+from turnping.config import AppConfig
+from turnping.contracts.events import EventCategory as C
+from turnping.contracts.events import HostWindow
+from turnping.core.policy import Action
+from turnping.core.session_manager import SessionState
+from turnping.notifications.base import DeliveryStatus
+from turnping.notifications.manager import NotificationManager
+from turnping.notifications.sound import SilentPlayer
 
 
 def claude(name, **overrides):
@@ -24,7 +24,7 @@ def test_stop_event_flows_to_backend_and_history(harness):
     [shown] = harness.backend.shown
     assert shown.title == "Claude Code finished responding"
     assert "webapp" in shown.attribution and "abc123"[:8] in shown.attribution
-    assert shown.launch_uri.startswith("agentping://open?event=")
+    assert shown.launch_uri.startswith("turnping://open?event=")
     [record] = harness.repo.list_events()
     assert record.delivery_status == "confirmed" and record.category == "RESPONSE_STOPPED"
     assert harness.sound.played  # default rule plays a sound
@@ -148,7 +148,7 @@ def test_acknowledge_stops_reminders(harness):
 
 
 def test_no_reminders_for_gemini():
-    from agentping.adapters.gemini_cli import GeminiCliAdapter
+    from turnping.adapters.gemini_cli import GeminiCliAdapter
 
     h = Harness()
     h.config.reminders.initial_delay_seconds = 30

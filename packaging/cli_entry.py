@@ -1,5 +1,5 @@
-"""PyInstaller entry for agentping-cli.exe (console; used by agent hooks)."""
+"""PyInstaller entry for turnping-cli.exe (console; used by agent hooks)."""
 
-from agentping.cli import main
+from turnping.cli import main
 
 raise SystemExit(main())

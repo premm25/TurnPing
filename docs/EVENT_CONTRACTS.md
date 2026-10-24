@@ -2,7 +2,7 @@
 
 ## AgentEvent (schema version 1)
 
-Defined in `src/agentping/contracts/events.py`. Unknown fields are rejected.
+Defined in `src/turnping/contracts/events.py`. Unknown fields are rejected.
 
 | Field | Type | Rules |
 |---|---|---|
@@ -34,7 +34,7 @@ same folder. The UI says so when this happens.
 | `TASK_FAILED` | A failure was reported (e.g. a turn ended by an API error). | Notify, high, sound |
 | `SESSION_RESUMED` | Activity: prompt submitted, tool ran, session (re)started. Resolves reminders. | Record only |
 | `SESSION_ENDED` | The session exited. Cancels reminders. | Record only |
-| `UNKNOWN` | A recognized payload with an event AgentPing doesn't model yet. | Record only |
+| `UNKNOWN` | A recognized payload with an event TurnPing doesn't model yet. | Record only |
 
 ## Processing guarantees
 
@@ -53,10 +53,10 @@ Any local program can send events with the CLI. Both forms go through the generi
 adapter's validation:
 
 ```powershell
-agentping send --provider my-build --category TASK_COMPLETED --message "Build finished" `
+turnping send --provider my-build --category TASK_COMPLETED --message "Build finished" `
   --project C:\src\app --session build-42 --event-id build42done
 
-'{"provider":"my-build","category":"TASK_FAILED","message":"Tests failed"}' | agentping send --json
+'{"provider":"my-build","category":"TASK_FAILED","message":"Tests failed"}' | turnping send --json
 ```
 
 Generic payload keys: `provider` (required, must not be a built-in id), `category`
@@ -70,7 +70,7 @@ once the human has responded.
 
 ## IPC protocol (internal)
 
-The named pipe `\\.\pipe\AgentPing-<hash(user, data dir)>` carries JSON messages after
+The named pipe `\\.\pipe\TurnPing-<hash(user, data dir)>` carries JSON messages after
 an HMAC challenge in both directions, keyed by `ipc.key`:
 
 - `{"v":1,"type":"event","event":{...}}`
@@ -78,4 +78,4 @@ an HMAC challenge in both directions, keyed by `ipc.key`:
 - `{"v":1,"type":"command","command":"ping|show|open_event|acknowledge|pause|resume|quit","event_id":"..."}`
 
 This protocol is internal and may change between versions. Integrations should use
-`agentping send`.
+`turnping send`.
