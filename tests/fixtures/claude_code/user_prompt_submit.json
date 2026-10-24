@@ -1,0 +1,7 @@
+{
+  "session_id": "abc123",
+  "prompt_id": "p-007",
+  "cwd": "C:/src/webapp",
+  "hook_event_name": "UserPromptSubmit",
+  "prompt": "please delete the database password=hunter2"
+}

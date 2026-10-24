@@ -1,0 +1,9 @@
+{
+  "session_id": "thr_123",
+  "transcript_path": null,
+  "cwd": "C:/src/api",
+  "hook_event_name": "SessionStart",
+  "model": "gpt-5.5",
+  "permission_mode": "default",
+  "source": "startup"
+}

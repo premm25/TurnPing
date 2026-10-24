@@ -1,0 +1,10 @@
+{
+  "session_id": "abc123",
+  "prompt_id": "p-004",
+  "transcript_path": "/Users/dev/.claude/projects/x/00893aaf-19fa-41d2-8238-13269b9b3ca0.jsonl",
+  "cwd": "C:/src/webapp",
+  "hook_event_name": "Notification",
+  "message": "Claude needs your permission to use Bash",
+  "title": "Permission needed",
+  "notification_type": "permission_prompt"
+}

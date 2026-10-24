@@ -1,0 +1,14 @@
+{
+  "session_id": "abc123",
+  "prompt_id": "p-006",
+  "cwd": "C:/src/webapp",
+  "hook_event_name": "PostToolUse",
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "npm test"
+  },
+  "tool_use_id": "toolu_01ABC123",
+  "tool_response": {
+    "stdout": "ok"
+  }
+}

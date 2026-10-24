@@ -1,0 +1,12 @@
+{
+  "session_id": "g-1",
+  "cwd": "C:/src/ml",
+  "hook_event_name": "Notification",
+  "timestamp": "2026-10-24T10:01:00.000Z",
+  "notification_type": "ToolPermission",
+  "message": "Allow run_shell_command?",
+  "details": {
+    "tool_name": "run_shell_command",
+    "command": "rm -rf /"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "session_id": "abc123",
+  "cwd": "C:/src/webapp",
+  "hook_event_name": "SubagentStop",
+  "agent_id": "a1",
+  "agent_type": "Explore",
+  "last_assistant_message": "done"
+}

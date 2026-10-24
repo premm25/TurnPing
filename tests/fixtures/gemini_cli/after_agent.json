@@ -1,0 +1,10 @@
+{
+  "session_id": "g-1",
+  "transcript_path": "/tmp/t.json",
+  "cwd": "C:/src/ml",
+  "hook_event_name": "AfterAgent",
+  "timestamp": "2026-10-24T10:00:00Z",
+  "prompt": "train the model",
+  "prompt_response": "Training finished.",
+  "stop_hook_active": false
+}

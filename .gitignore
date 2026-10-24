@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Build output (see scripts/build.ps1)
+build/
+dist/
+*.spec.bak
+
+# Editors / OS
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+
+# Local AgentPing data must never be committed
+*.db
+*.db-wal
+*.db-shm
+ipc.key

@@ -1,0 +1,7 @@
+{
+  "session_id": "abc123",
+  "cwd": "C:/src/webapp",
+  "hook_event_name": "Notification",
+  "message": "Signed in",
+  "notification_type": "auth_success"
+}

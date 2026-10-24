@@ -1,0 +1,10 @@
+{
+  "type": "agent-turn-complete",
+  "thread-id": "thr_456",
+  "turn-id": "turn_1",
+  "cwd": "C:/src/api",
+  "input-messages": [
+    "fix the bug"
+  ],
+  "last-assistant-message": "Fixed it."
+}

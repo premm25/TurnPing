@@ -1,0 +1,11 @@
+{
+  "session_id": "thr_123",
+  "turn_id": "turn_9",
+  "transcript_path": "/w/.codex/rollout.jsonl",
+  "cwd": "C:/src/api",
+  "hook_event_name": "Stop",
+  "model": "gpt-5.5",
+  "permission_mode": "default",
+  "stop_hook_active": false,
+  "last_assistant_message": "Done."
+}

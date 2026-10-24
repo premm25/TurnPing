@@ -1,0 +1,8 @@
+{
+  "session_id": "abc123",
+  "prompt_id": "p-005",
+  "cwd": "C:/src/webapp",
+  "hook_event_name": "Notification",
+  "message": "An MCP server needs input",
+  "notification_type": "elicitation_dialog"
+}

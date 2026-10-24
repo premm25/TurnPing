@@ -1,0 +1,13 @@
+{
+  "session_id": "thr_123",
+  "turn_id": "turn_9",
+  "cwd": "C:/src/api",
+  "hook_event_name": "PermissionRequest",
+  "model": "gpt-5.5",
+  "permission_mode": "default",
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "git push --force",
+    "description": "Push changes"
+  }
+}

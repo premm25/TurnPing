@@ -1,0 +1,8 @@
+{
+  "provider": "my-build",
+  "category": "TASK_COMPLETED",
+  "message": "Build finished in 3m",
+  "project_path": "C:/src/app",
+  "session_id": "build-42",
+  "event_id": "build42done"
+}
